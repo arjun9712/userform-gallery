@@ -2,10 +2,13 @@
 import React, { useState } from 'react';
 import { Submission, useSubmissionStore } from '@/lib/store';
 import SubmissionCard from './SubmissionCard';
+import SubmissionsTable from './SubmissionsTable';
 import EditModal from './EditModal';
 import ShareModal from './ShareModal';
-import { Search, Trash2 } from 'lucide-react';
+import { Search, Trash2, LayoutGrid, LayoutList, FileExport } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
+import { Button } from './ui/button';
 
 const AdminGallery = () => {
   const { toast } = useToast();
@@ -19,6 +22,7 @@ const AdminGallery = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
   const [submissionToDelete, setSubmissionToDelete] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
   const filteredSubmissions = submissions.filter((submission) => {
     const searchTermLower = searchTerm.toLowerCase();
@@ -62,23 +66,91 @@ const AdminGallery = () => {
     setSubmissionToDelete(null);
   };
   
+  const exportToCSV = () => {
+    if (submissions.length === 0) {
+      toast({
+        title: "No data to export",
+        description: "There are no submissions to export.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Create CSV header
+    const headers = ["Name", "Email", "Phone", "Message", "Date"].join(",");
+    
+    // Create CSV rows
+    const rows = submissions.map(submission => {
+      const name = `"${submission.name.replace(/"/g, '""')}"`;
+      const email = `"${submission.email.replace(/"/g, '""')}"`;
+      const phone = `"${submission.phone.replace(/"/g, '""')}"`;
+      const message = `"${submission.message.replace(/"/g, '""')}"`;
+      const date = `"${new Date(submission.createdAt).toLocaleString()}"`;
+      
+      return [name, email, phone, message, date].join(",");
+    });
+    
+    // Combine header and rows
+    const csvContent = [headers, ...rows].join("\n");
+    
+    // Create a blob with the CSV content
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    
+    // Create a download link
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `submissions-${new Date().toISOString().slice(0, 10)}.csv`);
+    link.style.visibility = "hidden";
+    
+    // Add the link to the DOM and trigger the download
+    document.body.appendChild(link);
+    link.click();
+    
+    // Clean up
+    document.body.removeChild(link);
+    
+    toast({
+      title: "Export successful",
+      description: "Your submissions have been exported to CSV.",
+    });
+  };
+  
   return (
     <>
       <div className="w-full animate-fade-in">
         <div className="glass-card p-6 mb-6">
           <div className="flex justify-between items-center mb-4 flex-wrap gap-4">
             <h2 className="heading text-2xl">Submissions</h2>
-            <div className="relative flex-1 max-w-md">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
-                <Search size={18} />
+            <div className="flex items-center gap-4">
+              <div className="relative flex-1 max-w-md">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
+                  <Search size={18} />
+                </div>
+                <input
+                  type="search"
+                  className="form-input pl-10"
+                  placeholder="Search submissions..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
-              <input
-                type="search"
-                className="form-input pl-10"
-                placeholder="Search submissions..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+              <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value as 'grid' | 'list')}>
+                <ToggleGroupItem value="grid" aria-label="Grid view">
+                  <LayoutGrid className="h-4 w-4" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="list" aria-label="List view">
+                  <LayoutList className="h-4 w-4" />
+                </ToggleGroupItem>
+              </ToggleGroup>
+              <Button 
+                onClick={exportToCSV} 
+                variant="outline" 
+                className="flex items-center gap-2"
+              >
+                <FileExport className="h-4 w-4" />
+                <span>Export</span>
+              </Button>
             </div>
           </div>
           
@@ -108,7 +180,7 @@ const AdminGallery = () => {
                 </>
               )}
             </div>
-          ) : (
+          ) : viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredSubmissions.map((submission) => (
                 <SubmissionCard
@@ -120,6 +192,13 @@ const AdminGallery = () => {
                 />
               ))}
             </div>
+          ) : (
+            <SubmissionsTable 
+              submissions={filteredSubmissions}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onShare={handleShare}
+            />
           )}
         </div>
       </div>
