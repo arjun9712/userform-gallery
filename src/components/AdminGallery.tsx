@@ -1,13 +1,12 @@
-
 import React, { useState } from 'react';
 import { Submission, useSubmissionStore } from '@/lib/store';
-import SubmissionCard from './SubmissionCard';
-import SubmissionsTable from './SubmissionsTable';
-import EditModal from './EditModal';
-import ShareModal from './ShareModal';
+import SubmissionCard from './submissions/SubmissionCard';
+import SubmissionsTable from './submissions/SubmissionsTable';
+import EditModal from './submissions/EditModal';
+import ShareModal from './submissions/ShareModal';
 import { useToast } from '@/hooks/use-toast';
 
-// Import the new components
+// Import the admin components
 import SearchBar from './admin/SearchBar';
 import ViewToggle from './admin/ViewToggle';
 import EmptyState from './admin/EmptyState';
@@ -15,6 +14,7 @@ import DeleteConfirmationModal from './admin/DeleteConfirmationModal';
 import ExportButton from './admin/ExportButton';
 
 const AdminGallery = () => {
+  // ... keep existing code (state definitions and utility functions)
   const { toast } = useToast();
   const submissions = useSubmissionStore((state) => state.submissions);
   const updateSubmission = useSubmissionStore((state) => state.updateSubmission);
