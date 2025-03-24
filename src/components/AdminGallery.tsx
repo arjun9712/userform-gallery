@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { Submission, useSubmissionStore } from '@/lib/store';
 import SubmissionCard from './SubmissionCard';
 import SubmissionsTable from './SubmissionsTable';
 import EditModal from './EditModal';
 import ShareModal from './ShareModal';
-import { Search, Trash2, LayoutGrid, LayoutList, FileExport } from 'lucide-react';
+import { Search, Trash2, LayoutGrid, LayoutList, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
 import { Button } from './ui/button';
@@ -148,7 +147,7 @@ const AdminGallery = () => {
                 variant="outline" 
                 className="flex items-center gap-2"
               >
-                <FileExport className="h-4 w-4" />
+                <FileText className="h-4 w-4" />
                 <span>Export</span>
               </Button>
             </div>
