@@ -1,19 +1,4 @@
 # Welcome to your Lovable project
-
-## Project info
-
-**URL**: https://lovable.dev/projects/d4c7fc06-1fc9-4d89-9c18-7b8e0a5a4be6
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/d4c7fc06-1fc9-4d89-9c18-7b8e0a5a4be6) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
 **Use your preferred IDE**
 
 If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
@@ -50,6 +35,83 @@ npm run dev
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
+  Local Development Setup for Submission Management App
+Prerequisites
+Node.js (preferably the latest LTS version) & npm installed
+Git installed
+A code editor (VS Code recommended)
+Getting Started
+Clone the repository
+
+git clone <YOUR_REPOSITORY_URL>
+cd <REPOSITORY_FOLDER_NAME>
+Install dependencies
+
+npm install
+Start the development server
+
+npm run dev
+This will start the application on http://localhost:8080. The app features hot-reloading, so any changes you make to the code will automatically refresh the browser.
+
+Project Structure
+src/ - Main source code directory
+components/ - Reusable UI components
+submissions/ - Components related to user submissions
+admin/ - Admin interface components
+ui/ - Shadcn UI components
+lib/ - Utility functions and stores
+hooks/ - Custom React hooks
+pages/ - Main page components
+Key Features
+Form submission management
+Submission viewing, editing, and deletion
+Search and filter functionality
+Responsive design for all device sizes
+Making Changes
+Create a new branch for your changes
+
+git checkout -b feature/your-feature-name
+Make your changes
+Commit your changes
+
+git add .
+git commit -m "Description of your changes"
+Push to your branch
+
+git push origin feature/your-feature-name
+Create a pull request on the repository website
+Data Management
+The application uses Zustand for state management. Submission data is stored in the browser's local storage for persistence between sessions.
+
+Deployment
+For deployment, use:
+
+
+npm run build
+This creates a production-ready build in the dist/ directory, which can be deployed to any static hosting service.
+
+Troubleshooting
+If you encounter module errors, try clearing node_modules and reinstalling:
+
+
+rm -rf node_modules
+npm install
+For Vite-related issues, check the Vite configuration in vite.config.ts
+
+Adding New Components
+Follow the existing project structure patterns:
+
+Create new components in appropriate folders
+Use TypeScript for type safety
+Style with Tailwind CSS
+Use shadcn/ui components where applicable
+Updating Dependencies
+Periodically update dependencies for security and new features:
+
+
+npm update
+For major version updates, check the changelog of each package for breaking changes before updating.
+
 ## What technologies are used for this project?
 
 This project is built with .
@@ -59,10 +121,6 @@ This project is built with .
 - React
 - shadcn-ui
 - Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/d4c7fc06-1fc9-4d89-9c18-7b8e0a5a4be6) and click on Share -> Publish.
 
 ## I want to use a custom domain - is that possible?
 
